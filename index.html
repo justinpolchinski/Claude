@@ -16,12 +16,9 @@
       --red: #f85149;
       --yellow: #d29922;
       --blue: #58a6ff;
-      --accent: #1f6feb;
       --gold: #e3b341;
     }
-
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
     body {
       background: var(--bg);
       color: var(--text);
@@ -34,454 +31,204 @@
     header {
       background: var(--surface);
       border-bottom: 1px solid var(--border);
-      padding: 16px 32px;
+      padding: 18px 32px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      position: sticky;
-      top: 0;
-      z-index: 100;
     }
-
-    header h1 {
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .logo-icon {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, #1f6feb, #58a6ff);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+    }
+    .logo h1 {
       font-size: 1.1rem;
       font-weight: 600;
-      letter-spacing: 0.02em;
-      color: var(--blue);
+      color: var(--text);
     }
-
-    header .header-meta {
+    .logo span {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-left: 4px;
+      font-weight: 400;
+    }
+    .header-date {
       font-size: 0.8rem;
       color: var(--muted);
     }
 
-    /* ── Layout ── */
+    /* ── Main ── */
     main {
-      max-width: 1100px;
+      max-width: 1000px;
       margin: 0 auto;
-      padding: 32px 24px;
+      padding: 40px 24px;
+    }
+
+    /* ── Section title ── */
+    .section-header {
       display: flex;
-      flex-direction: column;
-      gap: 24px;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 24px;
     }
-
-    /* ── Cards ── */
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 24px;
-    }
-
-    .card-title {
-      font-size: 0.7rem;
+    .section-header h2 {
+      font-size: 0.75rem;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.1em;
       color: var(--muted);
-      margin-bottom: 16px;
+    }
+    .entry-count {
+      font-size: 0.75rem;
+      color: var(--muted);
     }
 
-    /* ── Featured Stock ── */
-    .stock-hero {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      flex-wrap: wrap;
+    /* ── Entry grid ── */
+    .entries-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
       gap: 16px;
     }
 
-    .stock-identity h2 {
-      font-size: 2rem;
-      font-weight: 700;
-      color: var(--blue);
-      letter-spacing: 0.03em;
-    }
-
-    .stock-identity .company-name {
-      font-size: 1rem;
-      color: var(--muted);
-      margin-top: 2px;
-    }
-
-    .stock-identity .market-badge {
-      display: inline-block;
-      margin-top: 8px;
-      font-size: 0.7rem;
-      padding: 2px 8px;
-      border-radius: 4px;
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      color: var(--muted);
-    }
-
-    .price-block {
-      text-align: right;
-    }
-
-    .price-block .price {
-      font-size: 2.4rem;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-    }
-
-    .price-block .change {
-      font-size: 1rem;
-      font-weight: 500;
-      margin-top: 4px;
-    }
-
-    .price-block .trade-time {
-      font-size: 0.75rem;
-      color: var(--muted);
-      margin-top: 6px;
-    }
-
-    .down { color: var(--red); }
-    .up   { color: var(--green); }
-
-    /* ── Breakout Table ── */
-    .section-label {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 16px;
-    }
-
-    .section-label h3 {
-      font-size: 1rem;
-      font-weight: 600;
-    }
-
-    .section-label .timeframe {
-      font-size: 0.75rem;
-      padding: 2px 8px;
-      border-radius: 20px;
-      background: #1f3460;
-      color: var(--blue);
-      border: 1px solid #1f6feb44;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.88rem;
-    }
-
-    thead th {
-      text-align: left;
-      font-size: 0.7rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--muted);
-      padding: 8px 12px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    thead th:first-child { text-align: center; width: 48px; }
-    thead th.th-rating   { text-align: right; white-space: nowrap; }
-
-    tbody tr {
-      border-bottom: 1px solid var(--border);
-      transition: background 0.15s;
-    }
-
-    tbody tr:last-child { border-bottom: none; }
-    tbody tr:hover { background: var(--surface2); }
-
-    tbody tr.featured {
-      background: #1a2a3a;
-      border-left: 3px solid var(--gold);
-    }
-
-    tbody tr.featured:hover { background: #1e3045; }
-
-    td {
-      padding: 14px 12px;
-      vertical-align: top;
-    }
-
-    td:first-child {
-      text-align: center;
-      color: var(--muted);
-      font-weight: 700;
-      font-size: 0.9rem;
-    }
-
-    .ticker-cell {
-      font-weight: 700;
-      font-size: 1rem;
-      color: var(--blue);
-      white-space: nowrap;
-    }
-
-    .company-cell {
-      color: var(--text);
-      font-size: 0.85rem;
-    }
-
-    .rating-cell {
-      text-align: right;
-      white-space: nowrap;
-    }
-
-    .rating-badge {
-      display: inline-block;
-      font-weight: 700;
-      font-size: 0.95rem;
-      padding: 3px 10px;
-      border-radius: 6px;
-    }
-
-    .rating-high   { color: #39d353; background: #0f2a1a; }
-    .rating-mid    { color: #d29922; background: #2a1f0a; }
-    .rating-normal { color: var(--muted); background: var(--surface2); }
-
-    .setup-cell {
-      color: var(--muted);
-      font-size: 0.82rem;
-      line-height: 1.55;
-      max-width: 520px;
-    }
-
-    .setup-cell strong {
-      color: var(--text);
-    }
-
-    /* ── Bottom row grid ── */
-    .bottom-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 24px;
-    }
-
-    @media (max-width: 700px) {
-      .bottom-grid { grid-template-columns: 1fr; }
-      .price-block { text-align: left; }
-    }
-
-    /* ── Risk Note ── */
-    .risk-note {
-      background: #1e1a10;
-      border: 1px solid #3a2f10;
-      border-left: 3px solid var(--yellow);
-      border-radius: 8px;
-      padding: 16px 18px;
-      font-size: 0.85rem;
-      color: #c9a43a;
-      line-height: 1.6;
-    }
-
-    .risk-note strong {
-      color: var(--yellow);
-    }
-
-    .risk-note .risk-label {
+    /* ── Entry card ── */
+    .entry-card {
       display: block;
-      font-size: 0.7rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      margin-bottom: 8px;
-      color: var(--yellow);
+      text-decoration: none;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 22px 20px 18px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.2s, transform 0.15s, box-shadow 0.2s;
+      cursor: pointer;
+    }
+    .entry-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #1f6feb, #58a6ff);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .entry-card:hover {
+      border-color: #58a6ff66;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    }
+    .entry-card:hover::before {
+      opacity: 1;
     }
 
-    /* ── Market Trend ── */
-    .trend-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 4px;
-    }
-
-    .trend-chip {
-      font-size: 0.8rem;
-      font-weight: 500;
-      padding: 4px 12px;
-      border-radius: 20px;
-      background: #111d2e;
-      border: 1px solid #1f6feb44;
-      color: var(--blue);
-    }
-
-    .trend-intro {
-      font-size: 0.85rem;
+    .card-date {
+      font-size: 0.75rem;
       color: var(--muted);
-      margin-bottom: 12px;
+      letter-spacing: 0.03em;
+      margin-bottom: 10px;
     }
 
-    /* ── Entry log ── */
-    .log-header {
+    .card-ticker {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--blue);
+      letter-spacing: 0.02em;
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .card-company {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 14px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .card-footer {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 8px;
     }
 
-    .log-date {
-      font-size: 0.82rem;
-      color: var(--muted);
-    }
-
-    .entry-id {
-      font-size: 0.7rem;
+    .card-rating {
+      font-size: 0.8rem;
+      font-weight: 700;
       padding: 2px 8px;
-      border-radius: 4px;
-      background: var(--surface2);
-      border: 1px solid var(--border);
+      border-radius: 5px;
+    }
+    .rating-high { color: #39d353; background: #0f2a1a; }
+    .rating-mid  { color: #d29922; background: #2a1f0a; }
+
+    .card-arrow {
+      font-size: 0.9rem;
+      color: var(--border);
+      transition: color 0.2s, transform 0.2s;
+    }
+    .entry-card:hover .card-arrow {
+      color: var(--blue);
+      transform: translateX(3px);
+    }
+
+    /* ── Empty state ── */
+    .empty-state {
+      text-align: center;
+      padding: 80px 24px;
       color: var(--muted);
-      font-family: monospace;
+    }
+    .empty-state .empty-icon {
+      font-size: 3rem;
+      margin-bottom: 16px;
+      opacity: 0.4;
+    }
+    .empty-state h3 {
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    .empty-state p {
+      font-size: 0.85rem;
     }
 
     /* ── Footer ── */
     footer {
       text-align: center;
-      padding: 32px;
+      padding: 40px 24px;
       font-size: 0.75rem;
       color: var(--muted);
       border-top: 1px solid var(--border);
-      margin-top: 8px;
+      margin-top: 40px;
     }
   </style>
 </head>
 <body>
 
 <header>
-  <h1>&#9642; Stock Research Tracker</h1>
-  <span class="header-meta" id="header-date"></span>
+  <div class="logo">
+    <div class="logo-icon">&#9642;</div>
+    <h1>Stock Research Tracker <span>/ Log</span></h1>
+  </div>
+  <span class="header-date" id="header-date"></span>
 </header>
 
 <main>
-
-  <!-- Entry metadata -->
-  <div class="log-header">
-    <span class="entry-id" id="entry-id">ENTRY-001</span>
-    <span class="log-date" id="full-date"></span>
+  <div class="section-header">
+    <h2>Research Entries</h2>
+    <span class="entry-count" id="entry-count"></span>
   </div>
-
-  <!-- Featured Stock -->
-  <div class="card">
-    <div class="card-title">Featured Stock</div>
-    <div class="stock-hero">
-      <div class="stock-identity">
-        <h2>AKAM</h2>
-        <div class="company-name">Akamai Technologies Inc</div>
-        <span class="market-badge">Equity &bull; USA</span>
-      </div>
-      <div class="price-block">
-        <div class="price down">$149.56</div>
-        <div class="change down">&#9660; $3.47 &nbsp;(-0.02%)</div>
-        <div class="trade-time">Last trade: Wed, May 13 &mdash; 05:25:08 EDT</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Breakout Scan -->
-  <div class="card">
-    <div class="section-label">
-      <h3>Top Breakout Scan</h3>
-      <span class="timeframe">Next 7 days &bull; U.S.-listed</span>
-    </div>
-    <table>
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Ticker</th>
-          <th>Company</th>
-          <th class="th-rating">Rating</th>
-          <th>Key Setup</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="featured">
-          <td>1</td>
-          <td class="ticker-cell">AKAM</td>
-          <td class="company-cell">Akamai Technologies</td>
-          <td class="rating-cell"><span class="rating-badge rating-high">9.2 / 10</span></td>
-          <td class="setup-cell">
-            Stock jumped to a 26-year high after a <strong>$1.8B / 7-year AI cloud infrastructure commitment</strong>;
-            Q1 revenue <strong>$1.074B, +6% YoY</strong>, Cloud Infrastructure Services <strong>+40% YoY</strong>;
-            TradingView rates daily trend <strong>buy</strong>, weekly/monthly <strong>strong buy</strong>.
-          </td>
-        </tr>
-        <tr>
-          <td>2</td>
-          <td class="ticker-cell">INDV</td>
-          <td class="company-cell">Indivior Pharmaceuticals</td>
-          <td class="rating-cell"><span class="rating-badge rating-high">8.9 / 10</span></td>
-          <td class="setup-cell">
-            Q1 revenue <strong>$317M, +19% YoY</strong>; SUBLOCADE revenue <strong>$232M, +32% YoY</strong>;
-            adjusted EBITDA <strong>$164M, +112% YoY</strong> plus raised FY26 guidance and active buybacks.
-            Technicals: <strong>buy</strong> today, <strong>strong buy</strong> moving averages.
-          </td>
-        </tr>
-        <tr>
-          <td>3</td>
-          <td class="ticker-cell">ZBRA</td>
-          <td class="company-cell">Zebra Technologies</td>
-          <td class="rating-cell"><span class="rating-badge rating-mid">8.5 / 10</span></td>
-          <td class="setup-cell">
-            Q1 sales <strong>$1.495B vs. $1.308B YoY</strong>, adj. EPS <strong>$4.75 vs. $4.02</strong>,
-            FCF <strong>$163M</strong>, full-year sales-growth guidance raised to <strong>10%&ndash;14%</strong>.
-            Stock spiked double digits on the print; <strong>buy</strong> daily / <strong>strong buy</strong> MAs.
-          </td>
-        </tr>
-        <tr>
-          <td>4</td>
-          <td class="ticker-cell">VG</td>
-          <td class="company-cell">Venture Global</td>
-          <td class="rating-cell"><span class="rating-badge rating-mid">8.2 / 10</span></td>
-          <td class="setup-cell">
-            Q1 revenue <strong>+59% to $4.6B</strong>, EPS beat, 2026 adj. EBITDA guidance raised to
-            <strong>$8.2B&ndash;$8.5B</strong>; new TotalEnergies/Vitol LNG deals add forward catalyst.
-            Technical rating: <strong>strong buy</strong>.
-          </td>
-        </tr>
-        <tr>
-          <td>5</td>
-          <td class="ticker-cell">AMAT</td>
-          <td class="company-cell">Applied Materials</td>
-          <td class="rating-cell"><span class="rating-badge rating-mid">7.9 / 10</span></td>
-          <td class="setup-cell">
-            Near 52-week high with elevated volume; analysts expect fiscal Q2 revenue <strong>$7.7B, +8.5% YoY</strong>.
-            TSMC EPIC Center partnership adds AI-infrastructure narrative; <strong>buy</strong> daily /
-            <strong>strong buy</strong> MAs.
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <!-- Risk + Trend -->
-  <div class="bottom-grid">
-
-    <div class="card">
-      <div class="card-title">Risk Note</div>
-      <div class="risk-note">
-        <span class="risk-label">&#9651; Analyst Downgrade Flag</span>
-        Pure microcap momentum names downgraded despite huge relative volume &mdash; several showed
-        weak profitability, dilution/delist risk, or uncertain fundamentals.
-        <br /><br />
-        <strong>BWEN</strong>: explosive price action but Q1 revenue fell <strong>7.5% YoY</strong>
-        with a GAAP loss, despite strong orders and improving segment mix.
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">Market Trend This Week</div>
-      <p class="trend-intro">Momentum is strongest in:</p>
-      <div class="trend-grid">
-        <span class="trend-chip">AI Infrastructure</span>
-        <span class="trend-chip">Cloud / Automation</span>
-        <span class="trend-chip">Semicap Equipment</span>
-        <span class="trend-chip">LNG / Energy Security</span>
-      </div>
-    </div>
-
-  </div>
-
+  <div class="entries-grid" id="entries-grid"></div>
 </main>
 
 <footer>
@@ -489,24 +236,57 @@
 </footer>
 
 <script>
-  const now = new Date();
+  // ── Entry registry ──────────────────────────────────────────────────────────
+  // Add a new object here for each research log entry.
+  const ENTRIES = [
+    {
+      date:        '2026-05-13',
+      displayDate: 'May 13, 2026',
+      ticker:      'AKAM',
+      company:     'Akamai Technologies Inc',
+      rating:      '9.2/10',
+      ratingClass: 'rating-high',
+      path:        'entries/2026-05-13-AKAM.html'
+    }
+  ];
+  // ────────────────────────────────────────────────────────────────────────────
 
-  const longDate = now.toLocaleDateString('en-US', {
-    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
-    hour: '2-digit', minute: '2-digit', timeZoneName: 'short'
-  });
+  // Sort newest first
+  ENTRIES.sort((a, b) => b.date.localeCompare(a.date));
 
-  const shortDate = now.toLocaleDateString('en-US', {
-    year: 'numeric', month: 'short', day: 'numeric'
-  });
+  // Header date
+  document.getElementById('header-date').textContent =
+    new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
 
-  document.getElementById('header-date').textContent = shortDate;
-  document.getElementById('full-date').textContent = 'Logged ' + longDate;
+  // Render
+  const grid  = document.getElementById('entries-grid');
+  const count = document.getElementById('entry-count');
 
-  let count = parseInt(localStorage.getItem('srt_entry_count') || '0') + 1;
-  localStorage.setItem('srt_entry_count', count);
-  document.getElementById('entry-id').textContent =
-    'ENTRY-' + String(count).padStart(3, '0');
+  if (ENTRIES.length === 0) {
+    grid.innerHTML = `
+      <div class="empty-state" style="grid-column:1/-1">
+        <div class="empty-icon">&#128202;</div>
+        <h3>No entries yet</h3>
+        <p>Add your first research log entry to get started.</p>
+      </div>`;
+    count.textContent = '';
+  } else {
+    count.textContent = ENTRIES.length + (ENTRIES.length === 1 ? ' entry' : ' entries');
+    ENTRIES.forEach(e => {
+      const card = document.createElement('a');
+      card.className = 'entry-card';
+      card.href = e.path;
+      card.innerHTML = `
+        <div class="card-date">${e.displayDate}</div>
+        <div class="card-ticker">${e.ticker}</div>
+        <div class="card-company">${e.company}</div>
+        <div class="card-footer">
+          <span class="card-rating ${e.ratingClass}">${e.rating}</span>
+          <span class="card-arrow">&#8594;</span>
+        </div>`;
+      grid.appendChild(card);
+    });
+  }
 </script>
 
 </body>
