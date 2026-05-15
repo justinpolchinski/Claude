@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AMAT — May 15, 2026 | Stock Research Tracker</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --surface2: #1c2333;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #8b949e;
+      --green: #3fb950;
+      --red: #f85149;
+      --yellow: #d29922;
+      --blue: #58a6ff;
+      --gold: #e3b341;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .back-link {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.85rem;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .back-link:hover { color: var(--blue); }
+    .header-right { font-size: 0.8rem; color: var(--muted); }
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 32px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 24px;
+    }
+    .card-title {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+    .entry-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .entry-id {
+      font-size: 0.7rem;
+      padding: 2px 8px;
+      border-radius: 4px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-family: monospace;
+    }
+    .entry-date { font-size: 0.82rem; color: var(--muted); }
+    .stock-hero {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .stock-identity h2 { font-size: 2rem; font-weight: 700; color: var(--blue); letter-spacing: 0.03em; }
+    .stock-identity .company-name { font-size: 1rem; color: var(--muted); margin-top: 2px; }
+    .stock-identity .market-badge {
+      display: inline-block;
+      margin-top: 8px;
+      font-size: 0.7rem;
+      padding: 2px 8px;
+      border-radius: 4px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--muted);
+    }
+    .price-block { text-align: right; }
+    .price-block .price { font-size: 2.4rem; font-weight: 700; letter-spacing: -0.02em; }
+    .price-block .change { font-size: 1rem; font-weight: 500; margin-top: 4px; }
+    .price-block .trade-time { font-size: 0.75rem; color: var(--muted); margin-top: 6px; }
+    .up   { color: var(--green); }
+    .down { color: var(--red); }
+    .section-label { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+    .section-label h3 { font-size: 1rem; font-weight: 600; }
+    .section-label .timeframe {
+      font-size: 0.75rem;
+      padding: 2px 8px;
+      border-radius: 20px;
+      background: #1f3460;
+      color: var(--blue);
+      border: 1px solid #1f6feb44;
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    thead th {
+      text-align: left;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    thead th:first-child { text-align: center; width: 48px; }
+    thead th.th-rating { text-align: right; white-space: nowrap; }
+    tbody tr { border-bottom: 1px solid var(--border); transition: background 0.15s; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: var(--surface2); }
+    tbody tr.featured { background: #1a2a3a; border-left: 3px solid var(--gold); }
+    tbody tr.featured:hover { background: #1e3045; }
+    td { padding: 14px 12px; vertical-align: top; }
+    td:first-child { text-align: center; color: var(--muted); font-weight: 700; font-size: 0.9rem; }
+    .ticker-cell { font-weight: 700; font-size: 1rem; color: var(--blue); white-space: nowrap; }
+    .company-cell { color: var(--text); font-size: 0.85rem; }
+    .rating-cell { text-align: right; white-space: nowrap; }
+    .rating-badge { display: inline-block; font-weight: 700; font-size: 0.95rem; padding: 3px 10px; border-radius: 6px; }
+    .rating-high { color: #39d353; background: #0f2a1a; }
+    .rating-mid  { color: #d29922; background: #2a1f0a; }
+    .setup-cell { color: var(--muted); font-size: 0.82rem; line-height: 1.55; max-width: 520px; }
+    .setup-cell strong { color: var(--text); }
+    .risk-inline { color: var(--red); }
+    .why-inline { color: #79c0ff; font-style: italic; }
+    .bottom-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    @media (max-width: 700px) {
+      .bottom-grid { grid-template-columns: 1fr; }
+      .price-block { text-align: left; }
+    }
+    .risk-note {
+      background: #1e1a10;
+      border: 1px solid #3a2f10;
+      border-left: 3px solid var(--yellow);
+      border-radius: 8px;
+      padding: 16px 18px;
+      font-size: 0.85rem;
+      color: #c9a43a;
+      line-height: 1.6;
+    }
+    .risk-note strong { color: var(--yellow); }
+    .risk-label {
+      display: block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 8px;
+      color: var(--yellow);
+    }
+    .trend-intro { font-size: 0.85rem; color: var(--muted); margin-bottom: 12px; }
+    .trend-grid  { display: flex; flex-wrap: wrap; gap: 8px; }
+    .trend-chip {
+      font-size: 0.8rem;
+      font-weight: 500;
+      padding: 4px 12px;
+      border-radius: 20px;
+      background: #111d2e;
+      border: 1px solid #1f6feb44;
+      color: var(--blue);
+    }
+    footer {
+      text-align: center;
+      padding: 32px;
+      font-size: 0.75rem;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <a class="back-link" href="../index.html">&#8592; All Entries</a>
+  <span class="header-right">Stock Research Tracker</span>
+</header>
+
+<main>
+
+  <div class="entry-meta">
+    <span class="entry-id">2026-05-15 &nbsp;|&nbsp; AMAT</span>
+    <span class="entry-date">Thursday, May 15, 2026</span>
+  </div>
+
+  <!-- Featured Stock -->
+  <div class="card">
+    <div class="card-title">Featured Stock</div>
+    <div class="stock-hero">
+      <div class="stock-identity">
+        <h2>AMAT</h2>
+        <div class="company-name">Applied Materials</div>
+        <span class="market-badge">Equity &bull; USA</span>
+      </div>
+      <div class="price-block">
+        <div class="price up">Record Q2</div>
+        <div class="change up">Revenue $7.91B &nbsp;+11% YoY</div>
+        <div class="trade-time">GAAP EPS $3.51 &nbsp;+33% YoY &nbsp;&bull;&nbsp; Q3 Guide $8.95B</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Breakout Scan -->
+  <div class="card">
+    <div class="section-label">
+      <h3>Top Breakout Scan</h3>
+      <span class="timeframe">Next 7 days &bull; U.S.-listed</span>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Ticker</th>
+          <th>Company</th>
+          <th class="th-rating">Rating</th>
+          <th>Key Indicators &amp; Thesis</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="featured">
+          <td>1</td>
+          <td class="ticker-cell">AMAT</td>
+          <td class="company-cell">Applied Materials</td>
+          <td class="rating-cell"><span class="rating-badge rating-high">9.1 / 10</span></td>
+          <td class="setup-cell">
+            Record Q2 revenue <strong>$7.91B, +11% YoY</strong>; GAAP EPS <strong>$3.51, +33% YoY</strong>;
+            Q3 guide <strong>$8.95B ±$500M</strong>. RSI 63.6, +16.2% above 50-day SMA, 2.01× rel. volume, D/E 0.27.
+            <br /><span class="why-inline">Fresh earnings/guidance breakout with AI chip-equipment demand and confirmed volume. RSI is warm but not blow-off.</span>
+          </td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td class="ticker-cell">LITE</td>
+          <td class="company-cell">Lumentum Holdings</td>
+          <td class="rating-cell"><span class="rating-badge rating-high">8.8 / 10</span></td>
+          <td class="setup-cell">
+            Q3 revenue <strong>$808.4M, +90.1% YoY</strong>; non-GAAP op. margin <strong>32.2%</strong>;
+            joins Nasdaq-100 before market open <strong>May 18</strong>. RSI 58.6, +23.3% above 50-day SMA, short float ~12.6%.
+            <br /><span class="why-inline">Index inclusion adds near-term forced-buying while AI optical networking fundamentals remain strong.</span>
+          </td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td class="ticker-cell">CRDO</td>
+          <td class="company-cell">Credo Technology Group</td>
+          <td class="rating-cell"><span class="rating-badge rating-high">8.6 / 10</span></td>
+          <td class="setup-cell">
+            Q3 revenue <strong>$407M, +201.5% YoY / +51.9% QoQ</strong>; Q4 guide <strong>$425M–$435M</strong>;
+            non-GAAP GM guide 64%–66%. RSI 55.6, current ratio 10.82, D/E 0.01.
+            <br /><span class="why-inline">One of the cleanest "AI plumbing" growth setups. IBD cup-with-handle near <strong>$198.97</strong> buy point — confirmation above that level matters.</span>
+          </td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td class="ticker-cell">VRT</td>
+          <td class="company-cell">Vertiv Holdings</td>
+          <td class="rating-cell"><span class="rating-badge rating-mid">8.3 / 10</span></td>
+          <td class="setup-cell">
+            Q1 sales <strong>$2.65B, +30% YoY</strong>; adj. op. margin <strong>20.8%, +430 bps</strong>;
+            adj. FCF <strong>$653M, +147% YoY</strong>. +27.9% above 50-day SMA, EPS Q/Q +135.9%.
+            Investor conference <strong>May 19–20</strong>.
+            <br /><span class="why-inline">Strong data-center power/cooling demand plus a near-term investor-day catalyst. Caution: elevated RSI/valuation after a big run.</span>
+          </td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td class="ticker-cell">NVDA</td>
+          <td class="company-cell">NVIDIA</td>
+          <td class="rating-cell"><span class="rating-badge rating-mid">8.1 / 10</span></td>
+          <td class="setup-cell">
+            Last quarter revenue <strong>$68.1B, +73% YoY</strong>; data-center revenue <strong>$62.3B, +75% YoY</strong>;
+            next earnings <strong>May 20 AMC</strong>. RSI 76.7, +22.6% above 50-day SMA,
+            analyst target ~$273.52 vs. recent $235.74.
+            <br /><span class="why-inline">Primary AI momentum bellwether into earnings, but more extended than ideal — ranks below cleaner accumulation names.</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Risk + Trend -->
+  <div class="bottom-grid">
+    <div class="card">
+      <div class="card-title">Risk Note</div>
+      <div class="risk-note">
+        <span class="risk-label">&#9651; Chasing Overbought Leaders</span>
+        The biggest risk this week is <strong>chasing overbought AI leaders</strong> after sharp upside moves.
+        <br /><br />
+        <strong>NVDA</strong> (RSI 76.7) and <strong>VRT</strong> (extended above 50-day SMA) are
+        notable examples — both are strong businesses but current entries carry more risk than
+        cleaner setups like CRDO or AMAT.
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Sector Trend This Week</div>
+      <p class="trend-intro">Momentum is strongest in:</p>
+      <div class="trend-grid">
+        <span class="trend-chip">Semicap Equipment</span>
+        <span class="trend-chip">Optical Networking</span>
+        <span class="trend-chip">Data Center Power</span>
+        <span class="trend-chip">AI Infrastructure</span>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  Stock Research Tracker &mdash; for informational purposes only. Not investment advice.
+</footer>
+
+</body>
+</html>
