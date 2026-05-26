@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MRVL — May 26, 2026 | Stock Research Tracker</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --surface2: #1c2333;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #8b949e;
+      --green: #3fb950;
+      --red: #f85149;
+      --yellow: #d29922;
+      --blue: #58a6ff;
+      --gold: #e3b341;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .back-link {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.85rem;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .back-link:hover { color: var(--blue); }
+    .header-right { font-size: 0.8rem; color: var(--muted); }
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 32px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 24px;
+    }
+    .card-title {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+    .entry-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .entry-id {
+      font-size: 0.7rem;
+      padding: 2px 8px;
+      border-radius: 4px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-family: monospace;
+    }
+    .entry-date { font-size: 0.82rem; color: var(--muted); }
+    .stock-hero {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .stock-identity h2 { font-size: 2rem; font-weight: 700; color: var(--blue); letter-spacing: 0.03em; }
+    .stock-identity .company-name { font-size: 1rem; color: var(--muted); margin-top: 2px; }
+    .stock-identity .market-badge {
+      display: inline-block;
+      margin-top: 8px;
+      font-size: 0.7rem;
+      padding: 2px 8px;
+      border-radius: 4px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--muted);
+    }
+    .catalyst-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 8px;
+      margin-left: 8px;
+      font-size: 0.7rem;
+      padding: 2px 10px;
+      border-radius: 4px;
+      background: #1a2a1a;
+      border: 1px solid #3fb95044;
+      color: var(--green);
+      font-weight: 600;
+    }
+    .price-block { text-align: right; }
+    .price-block .price { font-size: 2.4rem; font-weight: 700; letter-spacing: -0.02em; color: var(--blue); }
+    .price-block .change { font-size: 0.95rem; font-weight: 500; margin-top: 4px; color: var(--muted); }
+    .price-block .trade-time { font-size: 0.75rem; color: var(--muted); margin-top: 6px; }
+    .section-label { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+    .section-label h3 { font-size: 1rem; font-weight: 600; }
+    .section-label .timeframe {
+      font-size: 0.75rem;
+      padding: 2px 8px;
+      border-radius: 20px;
+      background: #1f3460;
+      color: var(--blue);
+      border: 1px solid #1f6feb44;
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    thead th {
+      text-align: left;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    thead th:first-child { text-align: center; width: 48px; }
+    thead th.th-rating { text-align: right; white-space: nowrap; }
+    tbody tr { border-bottom: 1px solid var(--border); transition: background 0.15s; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: var(--surface2); }
+    tbody tr.featured { background: #1a2a3a; border-left: 3px solid var(--gold); }
+    tbody tr.featured:hover { background: #1e3045; }
+    td { padding: 14px 12px; vertical-align: top; }
+    td:first-child { text-align: center; color: var(--muted); font-weight: 700; font-size: 0.9rem; }
+    .ticker-cell { font-weight: 700; font-size: 1rem; color: var(--blue); white-space: nowrap; }
+    .company-cell { color: var(--text); font-size: 0.85rem; }
+    .rating-cell { text-align: right; white-space: nowrap; }
+    .rating-badge { display: inline-block; font-weight: 700; font-size: 0.95rem; padding: 3px 10px; border-radius: 6px; }
+    .rating-high { color: #39d353; background: #0f2a1a; }
+    .rating-mid  { color: #d29922; background: #2a1f0a; }
+    .setup-cell { color: var(--muted); font-size: 0.82rem; line-height: 1.55; max-width: 520px; }
+    .setup-cell strong { color: var(--text); }
+    .risk-inline { color: var(--red); }
+    .why-inline  { color: #79c0ff; font-style: italic; }
+    .bottom-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    @media (max-width: 700px) {
+      .bottom-grid { grid-template-columns: 1fr; }
+      .price-block { text-align: left; }
+    }
+    .risk-note {
+      background: #1e1a10;
+      border: 1px solid #3a2f10;
+      border-left: 3px solid var(--yellow);
+      border-radius: 8px;
+      padding: 16px 18px;
+      font-size: 0.85rem;
+      color: #c9a43a;
+      line-height: 1.6;
+    }
+    .risk-note strong { color: var(--yellow); }
+    .risk-label {
+      display: block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 8px;
+      color: var(--yellow);
+    }
+    .trend-intro { font-size: 0.85rem; color: var(--muted); margin-bottom: 12px; }
+    .trend-grid  { display: flex; flex-wrap: wrap; gap: 8px; }
+    .trend-chip {
+      font-size: 0.8rem;
+      font-weight: 500;
+      padding: 4px 12px;
+      border-radius: 20px;
+      background: #111d2e;
+      border: 1px solid #1f6feb44;
+      color: var(--blue);
+    }
+    footer {
+      text-align: center;
+      padding: 32px;
+      font-size: 0.75rem;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <a class="back-link" href="../index.html">&#8592; All Entries</a>
+  <span class="header-right">Stock Research Tracker</span>
+</header>
+
+<main>
+
+  <div class="entry-meta">
+    <span class="entry-id">2026-05-26 &nbsp;|&nbsp; MRVL</span>
+    <span class="entry-date">Tuesday, May 26, 2026</span>
+  </div>
+
+  <!-- Featured Stock -->
+  <div class="card">
+    <div class="card-title">Featured Stock</div>
+    <div class="stock-hero">
+      <div class="stock-identity">
+        <h2>MRVL</h2>
+        <div class="company-name">
+          Marvell Technology
+          <span class="catalyst-badge">&#9889; Earnings May 27</span>
+        </div>
+        <span class="market-badge">Equity &bull; USA &bull; Semiconductors</span>
+      </div>
+      <div class="price-block">
+        <div class="price">$196.33</div>
+        <div class="change">50-day MA $182.81 &nbsp;&bull;&nbsp; 200-day MA $163.76</div>
+        <div class="trade-time">Options implying up to 12% weekly move &nbsp;&bull;&nbsp; Est. Q1 rev $2.41B, adj. EPS $0.80</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Breakout Scan -->
+  <div class="card">
+    <div class="section-label">
+      <h3>Top Breakout Scan</h3>
+      <span class="timeframe">Next 7 days &bull; U.S.-listed</span>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Ticker</th>
+          <th>Company</th>
+          <th class="th-rating">Rating</th>
+          <th>Key Indicators &amp; Setup</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="featured">
+          <td>1</td>
+          <td class="ticker-cell">MRVL</td>
+          <td class="company-cell">Marvell Technology</td>
+          <td class="rating-cell"><span class="rating-badge rating-high">9.1 / 10</span></td>
+          <td class="setup-cell">
+            Price <strong>$196.33</strong>; above 50-day MA <strong>$182.81</strong> and 200-day MA <strong>$163.76</strong>;
+            earnings <strong>May 27</strong> with options implying up to <strong>12% weekly move</strong>.
+            Analyst est: Q1 revenue <strong>$2.41B</strong>, adj. EPS <strong>$0.80</strong> — both ~30% YoY growth.
+            <br /><span class="why-inline">Best near-term catalyst/technical combo. A strong AI-data-center guide could trigger a fresh high. <span class="risk-inline">Valuation and binary earnings risk are elevated.</span></span>
+          </td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td class="ticker-cell">DELL</td>
+          <td class="company-cell">Dell Technologies</td>
+          <td class="rating-cell"><span class="rating-badge rating-high">8.8 / 10</span></td>
+          <td class="setup-cell">
+            Price <strong>$295.19</strong>; 50-day MA <strong>$249.36</strong>, 200-day MA <strong>$223.43</strong>;
+            earnings <strong>May 28</strong> with options implying up to <strong>10% move</strong>.
+            FY26 revenue <strong>$113.5B, +19%</strong>; Q4 AI-optimized server revenue <strong>$9.0B, +342% YoY</strong>.
+            <br /><span class="why-inline">AI-server demand is the catalyst. Strong breakout but extended after a sharp May run. <span class="risk-inline">Failed earnings follow-through is the main risk.</span></span>
+          </td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td class="ticker-cell">LITE</td>
+          <td class="company-cell">Lumentum Holdings</td>
+          <td class="rating-cell"><span class="rating-badge rating-high">8.5 / 10</span></td>
+          <td class="setup-cell">
+            Price <strong>$946.90</strong>; above 50-day MA <strong>$931.87</strong> and 200-day MA <strong>$910.89</strong>;
+            fiscal Q3 revenue <strong>$808.4M, +90.1% YoY</strong>; non-GAAP op. margin <strong>32.2%</strong>.
+            Q4 guide: <strong>$960M–$1.01B</strong> revenue, non-GAAP EPS <strong>$2.85–$3.05</strong>.
+            <br /><span class="why-inline">AI optical-networking demand remains the driver. Cleaner setup than many AI names — closer to MA support. Already a major 2026 winner.</span>
+          </td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td class="ticker-cell">CRDO</td>
+          <td class="company-cell">Credo Technology</td>
+          <td class="rating-cell"><span class="rating-badge rating-mid">8.3 / 10</span></td>
+          <td class="setup-cell">
+            Price <strong>$218.41</strong>; Q3 revenue <strong>$407.0M, +51.9% QoQ / +201.5% YoY</strong>;
+            GAAP gross margin <strong>68.5%</strong>; cash &amp; short-term investments <strong>$1.3B</strong>.
+            FY26 results scheduled <strong>June 1 AMC</strong>.
+            <br /><span class="why-inline">High-beta AI connectivity breakout with a catalyst inside the 7-day window. <span class="risk-inline">Valuation and earnings expectations are stretched.</span></span>
+          </td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td class="ticker-cell">ALAB</td>
+          <td class="company-cell">Astera Labs</td>
+          <td class="rating-cell"><span class="rating-badge rating-mid">8.0 / 10</span></td>
+          <td class="setup-cell">
+            Price <strong>$306.88</strong>; Q1 revenue <strong>$308.4M, +93% YoY</strong>;
+            GAAP gross margin <strong>76.3%</strong>; Q2 outlook <strong>$355M–$365M</strong>,
+            non-GAAP EPS <strong>$0.68–$0.70</strong>. Strong-buy technical profile.
+            <br /><span class="why-inline">One of the strongest AI fabric/switch momentum names — exceptional margins and guidance. <span class="risk-inline">Downgraded: highly extended with a premium P/E.</span></span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Risk + Trend -->
+  <div class="bottom-grid">
+    <div class="card">
+      <div class="card-title">Risk Note</div>
+      <div class="risk-note">
+        <span class="risk-label">&#9651; Close Alternates &amp; Binary Risk</span>
+        <strong>IMVT</strong> has biotech momentum after strong IMVT-1402 RA data but widening
+        losses make it riskier for a clean breakout screen.
+        <strong>GEV</strong> remains strong, but the technical setup is less explosive than the
+        AI-connectivity group this week.
+        <br /><br />
+        <strong>MRVL</strong> and <strong>DELL</strong> both carry binary earnings risk within the
+        7-day window — position sizing around these events should reflect the elevated implied volatility.
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Sector Trend This Week</div>
+      <p class="trend-intro">Momentum is strongest in:</p>
+      <div class="trend-grid">
+        <span class="trend-chip">Custom Silicon</span>
+        <span class="trend-chip">AI Servers</span>
+        <span class="trend-chip">Optical Networking</span>
+        <span class="trend-chip">High-Speed Connectivity</span>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  Stock Research Tracker &mdash; for informational purposes only. Not investment advice.
+</footer>
+
+</body>
+</html>
