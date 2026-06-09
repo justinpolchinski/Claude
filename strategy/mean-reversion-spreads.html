@@ -291,6 +291,125 @@
     </p>
   </div>
 
+  <!-- ── 3.5 Confirmation Score ── -->
+  <div class="card">
+    <h2>3.5 &mdash; Confirmation Score: Is the Long Strike Protected?</h2>
+    <p>
+      The entry checklist (&sect;4) tells you the stock <em>is</em> at a statistical extreme.
+      The Confirmation Score tells you whether there is enough additional evidence that the stock will
+      <strong>bounce past both strikes</strong> &mdash; meaning it will close above the
+      <em>further-from-the-money leg</em> (the long put in a bull put spread), the level at which
+      your maximum loss is fully realized.
+    </p>
+    <p>
+      Each factor below is binary (pass/fail). The scanner calculates the score automatically.
+      <strong>Require a score of &ge; 8 out of 12 before entering.</strong>
+    </p>
+
+    <h3>Factor table</h3>
+    <table>
+      <thead>
+        <tr><th>Factor</th><th>Pts</th><th>Pass condition</th><th>Logic</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>1. Ticker backtest win rate</strong></td><td style="text-align:center">2</td>
+          <td>Historical 30-day positive-return rate after identical signal &ge; 80%</td>
+          <td>The stock's own past behavior at this exact combination of conditions — not structural POP, but realized outcome. Calculated from up to 5 years of daily history. 2 pts &ge;80%, 1 pt &ge;65%, 0 pts below.</td>
+        </tr>
+        <tr>
+          <td><strong>2. ATR coverage</strong></td><td style="text-align:center">2</td>
+          <td>Long strike &gt; 2.0 &times; ATR(14) below current price</td>
+          <td>The max-loss level requires a historically extreme move just to reach it. At 2× ATR the stock would have to make back-to-back near-record daily moves for 30 days. 2 pts &ge;2.5×, 1 pt &ge;2.0×.</td>
+        </tr>
+        <tr>
+          <td><strong>3. Support layers</strong></td><td style="text-align:center">2</td>
+          <td>&ge; 2 independent support levels below the long strike</td>
+          <td>Count major structures sitting between the long strike and the current price, or below it: 50-day SMA, 100-day SMA, 200-day SMA, 52-week low, rolling 20-day low, prior significant pivot low. Each is a price magnet and bounce zone. 2 pts &ge;3 layers, 1 pt &ge;2.</td>
+        </tr>
+        <tr>
+          <td><strong>4. Volume capitulation</strong></td><td style="text-align:center">1</td>
+          <td>Current volume &ge; 1.5&times; the 20-day average</td>
+          <td>A spike in volume on a down day signals panic exhaustion rather than orderly distribution. Heavy sell volume at an already oversold level is one of the most reliable mean-reversion precursors.</td>
+        </tr>
+        <tr>
+          <td><strong>5. Reversal candle</strong></td><td style="text-align:center">1</td>
+          <td>Lower wick &ge; 2&times; the candle body on the signal day</td>
+          <td>A hammer, doji, or long-tailed candle shows sellers tried to push lower intraday but buyers stepped in. Combined with the other extreme readings this is price-action confirmation of a panic low.</td>
+        </tr>
+        <tr>
+          <td><strong>6. MACD exhaustion</strong></td><td style="text-align:center">1</td>
+          <td>MACD histogram is negative but has been rising for &ge; 2 bars</td>
+          <td>The trend is still down (histogram negative) but momentum is waning — classic first signal of momentum exhaustion before a mean-reversion bounce, occurring well before a bullish MACD cross.</td>
+        </tr>
+        <tr>
+          <td><strong>7. Broad market trend</strong></td><td style="text-align:center">1</td>
+          <td>SPY close &gt; its 200-day SMA</td>
+          <td>Avoids selling puts on single stocks during a market-wide bear phase, where correlated drawdowns can breach spread widths that would be safe in a healthy tape. The most important risk-off filter.</td>
+        </tr>
+        <tr>
+          <td><strong>8. Broad market oversold</strong></td><td style="text-align:center">1</td>
+          <td>SPY RSI(2) &lt; 25</td>
+          <td>When the broad market is simultaneously washed out, put premium across single names is at its richest and the setup for a coordinated bounce is strongest. Not required, but a meaningful plus.</td>
+        </tr>
+        <tr>
+          <td><strong>9. IV environment</strong></td><td style="text-align:center">1</td>
+          <td>HV rank &ge; 40 on the signal day (proxy for elevated IV)</td>
+          <td>Entering in a high-vol environment means you are selling richer premium and IV crush adds a second tailwind beyond the directional move. At low HV rank the credit barely compensates for the risk.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Score interpretation</h3>
+    <table>
+      <thead><tr><th>Score</th><th>Action</th></tr></thead>
+      <tbody>
+        <tr><td><strong>10&ndash;12</strong></td><td>High-confidence setup. Enter at full size for your profile.</td></tr>
+        <tr class="rec"><td><strong>8&ndash;9</strong></td><td>Standard entry. Proceed with normal sizing.</td></tr>
+        <tr><td><strong>6&ndash;7</strong></td><td>Borderline. Skip, or reduce size by half and widen to Conservative profile only.</td></tr>
+        <tr><td><strong>&le; 5</strong></td><td>Do not enter regardless of the checklist signal.</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Why this specifically guards the long strike</h3>
+    <p>
+      The <strong>ATR coverage</strong> factor directly asks: "how many historically extreme daily moves
+      would it take to breach my max-loss level?" If the long strike is 2.5&times; ATR below the current
+      price, a catastrophic breach requires a chain of events more severe than almost anything in the
+      ticker's recorded history &mdash; statistically, the stock is far more likely to bounce than to
+      reach that level.
+    </p>
+    <p>
+      The <strong>support layers</strong> factor ensures the long strike sits beneath real structural floors
+      rather than in open air. Every moving average and pivot level between the current price and the long
+      strike is a zone where buyers have historically stepped in. The more layers, the more buy orders
+      stand between the stock and your maximum-loss level.
+    </p>
+    <div class="warn">
+      <strong>Gap risk:</strong> none of these factors eliminate overnight gap risk (earnings, macro events,
+      FDA decisions). The earnings-calendar check in the entry checklist (&sect;4) is mandatory precisely
+      because a single gap through the long strike wipes out every technical floor at once.
+    </div>
+
+    <details>
+      <summary>Quick worked example &mdash; AAPL at $185, balanced profile</summary>
+      <div class="details-body">
+        <ul>
+          <li>Entry signal: RSI(2) = 3.1, close < lower BB, z-score = -1.87, close > SMA200 &#10003;</li>
+          <li>Spread: short put $175 (30&Delta;), long put $170 (further-from-money leg)</li>
+          <li>ATR(14) = $3.20 &rarr; long strike $170 is <strong>4.7&times; ATR</strong> below $185 &rarr; 2 pts</li>
+          <li>Support layers below $170: 200-SMA $168, 52-week low $164 &rarr; 2 layers &rarr; 1 pt (need &ge;3 for 2 pts)</li>
+          <li>Volume: 2.1&times; average &rarr; 1 pt</li>
+          <li>Reversal candle: lower wick 1.8&times; body &rarr; 0 pts (just missed)</li>
+          <li>MACD histogram: &minus;0.12 &rarr; &minus;0.09 &rarr; &minus;0.05 (rising 3 bars) &rarr; 1 pt</li>
+          <li>SPY > SMA200 &rarr; 1 pt; SPY RSI(2) = 18 &rarr; 1 pt; HV rank 62 &rarr; 1 pt</li>
+          <li>Backtest: 14 of 17 past signals ended positive at 30 days = 82% &rarr; 2 pts</li>
+          <li><strong>Total: 10 / 12 &rarr; High-confidence. Enter at full balanced size.</strong></li>
+        </ul>
+      </div>
+    </details>
+  </div>
+
   <!-- ── 4. Entry rules ── -->
   <div class="card">
     <h2>4 &mdash; Entry Checklist (all conditions required)</h2>
