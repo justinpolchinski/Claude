@@ -181,6 +181,48 @@
       transform: translateX(3px);
     }
 
+    /* ── Strategy Lab ── */
+    .lab-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      text-decoration: none;
+      background: linear-gradient(135deg, #1a1230 0%, #161b22 60%);
+      border: 1px solid #bc8cff44;
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-bottom: 36px;
+      transition: border-color 0.2s, transform 0.15s, box-shadow 0.2s;
+    }
+    .lab-card:hover {
+      border-color: #bc8cff99;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    }
+    .lab-card .lab-info h3 {
+      font-size: 1rem;
+      font-weight: 650;
+      color: #bc8cff;
+      margin-bottom: 2px;
+    }
+    .lab-card .lab-info p {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    .lab-card .lab-tag {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 20px;
+      background: #2a1a3a;
+      border: 1px solid #bc8cff44;
+      color: #bc8cff;
+      white-space: nowrap;
+    }
+
     /* ── Empty state ── */
     .empty-state {
       text-align: center;
@@ -224,6 +266,14 @@
 </header>
 
 <main>
+  <a class="lab-card" href="strategy/mean-reversion-spreads.html">
+    <div class="lab-info">
+      <h3>Mean-Reversion Spread Strategy</h3>
+      <p>$5-wide vertical spreads at statistical extremes &mdash; the math, the rules, and free scanner code (Python + thinkorswim)</p>
+    </div>
+    <span class="lab-tag">Strategy Lab</span>
+  </a>
+
   <div class="section-header">
     <h2>Research Entries</h2>
     <span class="entry-count" id="entry-count"></span>
